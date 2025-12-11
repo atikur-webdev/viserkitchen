@@ -16,9 +16,10 @@ class FileInfo
     |
     */
 
-    public function fileInfo(){
+    public function fileInfo()
+    {
         $data['verify'] = [
-            'path'      =>'assets/verify'
+            'path'      => 'assets/verify'
         ];
         $data['default'] = [
             'path'      => 'assets/images/default.png',
@@ -41,22 +42,22 @@ class FileInfo
             'size'      => '1180x600',
         ];
         $data['userProfile'] = [
-            'path'      =>'assets/images/user/profile',
-            'size'      =>'350x300',
+            'path'      => 'assets/images/user/profile',
+            'size'      => '350x300',
         ];
         $data['adminProfile'] = [
-            'path'      =>'assets/admin/images/profile',
-            'size'      =>'400x400',
+            'path'      => 'assets/admin/images/profile',
+            'size'      => '400x400',
         ];
         $data['push'] = [
-            'path'      =>'assets/images/push_notification',
+            'path'      => 'assets/images/push_notification',
         ];
         $data['appPurchase'] = [
-            'path'      =>'assets/in_app_purchase_config',
+            'path'      => 'assets/in_app_purchase_config',
         ];
         $data['maintenance'] = [
-            'path'      =>'assets/images/maintenance',
-            'size'      =>'660x325',
+            'path'      => 'assets/images/maintenance',
+            'size'      => '660x325',
         ];
         $data['language'] = [
             'path' => 'assets/images/language',
@@ -82,11 +83,16 @@ class FileInfo
         ];
         $data['products'] = [
             'path' => 'assets/images/products',
-            'size' => '200x135'
+            'size' => '200x135',
+        ];
+        $data['productImages'] = [
+            'path' => 'assets/images/products/images',
+            'size' => '600x600',
+            'thumb' => '180x180'
         ];
 
 
-        return $data;
-	}
 
+        return $data;
+    }
 }

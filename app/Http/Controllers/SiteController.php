@@ -8,6 +8,7 @@ use App\Models\AdminNotification;
 use App\Models\Category;
 use App\Models\Frontend;
 use App\Models\GeneralSetting;
+use App\Models\Image;
 use App\Models\Language;
 use App\Models\Page;
 use App\Models\Product;
@@ -111,7 +112,8 @@ class SiteController extends Controller
         return to_route('ticket.view', [$ticket->ticket])->withNotify($notify);
     }
 
-    public function categoryIndex($id) {
+    public function categoryIndex($id)
+    {
         $pageTitle = 'Category List';
         $categoryId = $id;
         $products = Product::where('category_id', $categoryId)->with('category')->get();
@@ -119,13 +121,16 @@ class SiteController extends Controller
         return view('Template::category.index', compact('pageTitle', 'products', 'categories', 'categoryId'));
     }
 
-    public function productDetails($id) {
+    public function productDetails($id)
+    {
         $pageTitle  = 'Product Details';
-        $products = Product::where('id', $id)->get();
-        return view('Template::product.details', compact('pageTitle', 'products'));
+        $product = Product::where('id', $id)->with('images', 'category')->first();
+        $relatedProducts = Product::where('category_id', $product->category_id)->limit(10)->get();
+        return view('Template::product.details', compact('pageTitle', 'product', 'relatedProducts'));
     }
 
-    public function checkout() {
+    public function checkout()
+    {
         $pageTitle = 'Checkout';
         return view('Template::checkout', compact('pageTitle'));
     }
@@ -148,12 +153,12 @@ class SiteController extends Controller
         if ($validator->fails()) {
             return response()->json(['type' => 'error', 'message' => $validator->errors()]);
         }
-   
+
         $subscribe = new Subscriber();
         $subscribe->email = $request->email;
         $subscribe->save();
 
-      
+
         return response()->json([
             'type' => 'success',
             'message' => 'Subscribe successfully'

@@ -5,31 +5,53 @@ namespace App\Http\Controllers\Admin;
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Product;
 use App\Rules\FileTypeValidate;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $pageTitle = 'Products';
         $categories = Category::where('status', Status::YES)->get();
-        $products = Product::OrderBy('id', 'desc')->with('category')->get();
+        $products = Product::OrderBy('id', 'desc')->with('category', 'images')->get();  
         return view('admin.products.index', compact('pageTitle', 'categories', 'products'));
     }
-    public function store(Request $request) {
+    public function create()
+    {
+        $pageTitle = 'Create product';
+        $categories = Category::where('status', Status::YES)->get();
+        return view('admin.products.create', compact('pageTitle', 'categories'));
+    }
+    public function store(Request $request)
+    {
+
         $request->validate([
             'name' => 'required',
             'category_id' => 'required',
             'regular_price' => 'required',
             'sales_price' => 'nullable',
+            'delivery_time' => 'required',
+            'short_description' => 'required',
+            'ingredients' => 'required',
+            'spicy_level' => 'required',
+            'cooking_time' => 'required',
+            'calories' => 'required',
+            'description' => 'nullable',
             'image' => ['image', 'required', new FileTypeValidate(['jpg', 'png', 'jpeg', 'sv'])],
+            'photos' => 'nullable|array',
+            'photos.*' => ['image', new FileTypeValidate(['jpg', 'jpeg', 'png', 'svg'])],
+
         ]);
 
+
         $product = new Product();
-        if($request->hasFile('image')) {
-            try{
-                $product->image = fileUploader($request->image, getFilePath('products'), getFileSize('products'));
+
+        if ($request->hasFile('image')) {
+            try {
+                $product->image = fileUploader($request->image, getFilePath('products'), getFileSize('products'), null);
             } catch (\Exception $exp) {
                 $notify[] = ['error', $exp->getMessage()];
                 return back()->withNotify($notify);
@@ -40,24 +62,60 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->regular_price = $request->regular_price;
         $product->sales_price = $request->sales_price;
+        $product->delivery_time = $request->delivery_time;
+        $product->short_description = $request->short_description;
+        $product->ingredients = $request->ingredients;
+        $product->spicy_level = $request->spicy_level;
+        $product->cooking_time = $request->cooking_time;
+        $product->calories = $request->calories;
+        $product->description = $request->description;
         $product->save();
+
+        if ($request->photos) {
+            foreach ($request->photos as  $photo) {
+                $img = new Image();
+                $img->product_id = $product->id;
+                try {
+                    $img->image = fileUploader($photo, getFilePath('productImages'), getFileSize('productImages'), null, getFileThumb('productImages'));
+                } catch (\Exception $exp) {
+                    $notify[] = ['error', $exp->getMessage()];
+                    return back()->withNotify($notify);
+                }
+                $img->save();
+            }
+        }
 
         $notify[] = ['success', 'Product added successfully'];
         return back()->withNotify($notify);
     }
-    public function update(Request $request, $id) {
+    public function edit($id)
+    {
+        $pageTitle = 'Edit Product';
+        $categories = Category::where('status', Status::YES)->get();
+        $product = Product::where('id', $id)->with('images')->first();
+
+        return view('admin.products.edit', compact('pageTitle', 'product', 'categories'));
+    }
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'name' => 'required',
-            'image' => ['required', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png', 'svg'])],
+            'image' => ['nullable', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
             'category_id' => 'required',
             'regular_price' => 'integer|required',
             'sales_price' => 'integer|required',
+            'delivery_time' => 'required',
+            'short_description' => 'required',
+            'ingredients' => 'required',
+            'spicy_level' => 'required',
+            'cooking_time' => 'required',
+            'calories' => 'required',
             'max_rating' => 'integer|min:1|max:5'
         ]);
         $product = Product::findOrFail($id);
         $old = $product->image;
-        if($request->hasFile('image')) {
-            try{
+        if ($request->hasFile('image')) {
+            try {
                 $product->image = fileUploader($request->image, getFilePath('products'), getFileSize('products'), $old);
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Couldn\'t upload item image'];
@@ -68,17 +126,31 @@ class ProductController extends Controller
         $product->ratings = $request->max_rating;
         $product->regular_price = $request->regular_price;
         $product->sales_price = $request->sales_price;
+        $product->delivery_time = $request->delivery_time;
+        $product->short_description = $request->short_description;
+        $product->ingredients = $request->ingredients;
+        $product->spicy_level = $request->spicy_level;
+        $product->cooking_time = $request->cooking_time;
+        $product->calories = $request->calories; 
+        $product->description = $request->description;   
         $product->save();
-        $notify = ['success', 'Item updated successfully'];
+
+        if ($request->photos) {
+            foreach ($request->photos as  $photo) {
+                $img = new Image();
+                $img->product_id = $product->id;
+                try {
+                    $img->image = fileUploader($photo, getFilePath('productImages'), getFileSize('productImages'), null, getFileThumb('productImages'));
+                } catch (\Exception $exp) {
+                    $notify[] = ['error', $exp->getMessage()];
+                    return back()->withNotify($notify);
+                }
+                $img->save();
+            }
+        }
+        $notify[] = ['success', 'Product updated successfully'];
         return back()->withNotify($notify);
     }
-    // public function delete($id) {
-    //     $product = Product::findOrFail($id);
-    //     $product->delete();
-    //     $notify[] = ['success', 'Product deleted successfully'];
-    //     return back()->withNotify($notify);
-    // }
-
     public function productStatus($id)
     {
         return Product::changeStatus($id);

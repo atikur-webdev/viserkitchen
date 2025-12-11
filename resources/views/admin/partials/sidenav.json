@@ -331,8 +331,8 @@
         "icon": "las la-tags",
         "keyword": ["categories", "categories item", "item", "all item"],
         "title": "Products",
-        "route_name": "admin.products.index",
-        "menu_active": "admin.products.index"
+        "route_name": "admin.product.index",
+        "menu_active": "admin.product.index"
     },
     "support_ticket": {
         "title": "Support Ticket",

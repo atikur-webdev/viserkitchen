@@ -339,20 +339,18 @@
 
                             <!-- Category -->
                             <div class="sidebar-item">
-                                <h6 class="sidebar-item__title">Food Category</h6>
+                                <h6 class="sidebar-item__title">@lang('Food Category')</h6>
 
                                 @foreach ($categories as $category)
                                     <div class="form-check form--check">
-                                        <input class="form-check-input" type="checkbox" id="{{ $category->id }}"
-                                            @if ($category->id == $categoryId) checked @endif>
+                                        <input class="form-check-input category" name="category[]" type="checkbox" id="{{ $category->id }}"
+                                            @if ($category->id == $categoryId) checked @endif data-action="{{ route('category.index', $category->id) }}">
                                         <label class="form-check-label"
                                             for="{{ $category->id }}">{{ __($category->name) }}</label>
                                     </div>
                                 @endforeach
                             </div>
                             <!-- End Category -->
-
-
                             <!-- Price Filter -->
                             <div class="sidebar-item">
                                 <h6 class="sidebar-item__title"> Price </h6>
@@ -366,10 +364,7 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- End Price -->
-
-
                             <!-- Rating Filter -->
                             <div class="sidebar-item">
                                 <h6 class="sidebar-item__title"> Rating </h6>
@@ -506,8 +501,6 @@
                                 </div>
                             </div>
                             <!-- End Rating -->
-
-
                             <!-- Cooking Time -->
                             <div class="sidebar-item ">
                                 <h6 class="sidebar-item__title">Cooking Time</h6>
@@ -526,8 +519,6 @@
                                 </div>
                             </div>
                             <!-- End Cooking Time -->
-
-
                             <!-- Dietary Preference -->
                             <div class="sidebar-item mt-4">
                                 <h6 class="sidebar-item__title">Diet Type</h6>
@@ -548,12 +539,9 @@
                                 </div>
                             </div>
                             <!-- End Dietary -->
-
                         </div>
-
                     </div>
                     <!-- Sidebar End -->
-
                     <!-- Product -->
                     <div class="col-xl-9">
                         <div class="product-sidebar-filter d-xl-none d-block">
@@ -571,18 +559,23 @@
                                             <a href="{{ route('product.details', $product->id) }}">
                                                 <img src="{{ getImage(getFilePath('products') . '/' . $product->image, getFileSize('products')) }}"
                                                     alt="">
+                                                    <div class="product-item__content">
+                                                        <h6 class="product-item__title"> {{ __($product->name) }} </h6>
+                                                    </div>
                                             </a>
-                                        </div>
-                                        <div class="product-item__content">
-                                            <h6 class="product-item__title"> {{ __($product->name) }} </h6>
-
                                         </div>
                                         <div class="product-item__bottom">
                                             <ul class="rating-list">
-                                                @for ($i = 0; $i < $product->ratings; $i++)
-                                                    <li class="rating-list__item">
-                                                        <i class="fa-solid fa-star"></i>
-                                                    </li>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($product->ratings >= $i)
+                                                        <li class="rating-list__item">
+                                                            <i class="las la-star"></i>
+                                                        </li>
+                                                    @else
+                                                        <li class="single-rating-item fs-14">
+                                                            <i class="fa-solid fa-star"></i>
+                                                        </li>
+                                                    @endif
                                                 @endfor
 
                                             </ul>
@@ -604,12 +597,17 @@
                         </div>
                     </div>
                     <!-- Product End -->
-
                 </div>
             </div>
         </div>
-
-
     </main>
-
 @endsection
+
+
+@push('script')
+    <script>
+        $('.category').on('change', function(e) {
+            let val = $(this).data('action');
+        })
+    </script>
+@endpush

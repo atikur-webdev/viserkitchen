@@ -33,8 +33,8 @@ function verificationCode($length)
 {
     if ($length == 0) return 0;
     $min = pow(10, $length - 1);
-    $max = (int) ($min - 1).'9';
-    return random_int($min,$max);
+    $max = (int) ($min - 1) . '9';
+    return random_int($min, $max);
 }
 
 function getNumber($length = 8)
@@ -49,24 +49,28 @@ function getNumber($length = 8)
 }
 
 
-function activeTemplate($asset = false) {
+function activeTemplate($asset = false)
+{
     $template = session('template') ?? gs('active_template');
     if ($asset) return 'assets/templates/' . $template . '/';
     return 'templates.' . $template . '.';
 }
 
-function activeTemplateName() {
+function activeTemplateName()
+{
     $template = session('template') ?? gs('active_template');
     return $template;
 }
 
-function siteLogo($type = null) {
+function siteLogo($type = null)
+{
     $name = $type ? "/logo_$type.png" : '/logo.png';
     return getImage(getFilePath('logoIcon') . $name);
 }
 
-function siteFavicon() {
-    return getImage(getFilePath('logoIcon'). '/favicon.png');
+function siteFavicon()
+{
+    return getImage(getFilePath('logoIcon') . '/favicon.png');
 }
 
 function loadReCaptcha()
@@ -124,11 +128,11 @@ function showAmount($amount, $decimal = 2, $separate = true, $exceptZeros = fals
     }
     if ($currencyFormat) {
         if (gs('currency_format') == Status::CUR_BOTH) {
-            return gs('cur_sym').$printAmount.' '.__(gs('cur_text'));
-        }elseif(gs('currency_format') == Status::CUR_TEXT){
-            return $printAmount.' '.__(gs('cur_text'));
-        }else{
-            return gs('cur_sym').$printAmount;
+            return gs('cur_sym') . $printAmount . ' ' . __(gs('cur_text'));
+        } elseif (gs('currency_format') == Status::CUR_TEXT) {
+            return $printAmount . ' ' . __(gs('cur_text'));
+        } else {
+            return gs('cur_sym') . $printAmount;
         }
     }
     return $printAmount;
@@ -218,7 +222,7 @@ function getImage($image, $size = null)
 }
 
 
-function notify($user, $templateName, $shortCodes = null, $sendVia = null, $createLog = true,$pushImage = null)
+function notify($user, $templateName, $shortCodes = null, $sendVia = null, $createLog = true, $pushImage = null)
 {
     $globalShortCodes = [
         'site_name' => gs('site_name'),
@@ -250,7 +254,7 @@ function getPaginate($paginate = null)
     return $paginate;
 }
 
-function paginateLinks($data,$view = null)
+function paginateLinks($data, $view = null)
 {
     return $data->appends(request()->all())->links($view);
 }
@@ -261,7 +265,7 @@ function menuActive($routeName, $type = null, $param = null)
     if ($type == 3) $class = 'side-menu--open';
     elseif ($type == 2) $class = 'sidebar-submenu__open';
     else $class = 'active';
- 
+
     if (is_array($routeName)) {
         foreach ($routeName as $key => $value) {
             if (request()->routeIs($value)) return $class;
@@ -276,7 +280,7 @@ function menuActive($routeName, $type = null, $param = null)
     }
 }
 
-function fileUploader($file, $location, $size = null, $old = null, $thumb = null,$filename = null)
+function fileUploader($file, $location, $size = null, $old = null, $thumb = null, $filename = null)
 {
     $fileManager = new FileManager($file);
     $fileManager->path = $location;
@@ -303,6 +307,12 @@ function getFileSize($key)
     return fileManager()->$key()->size;
 }
 
+function getFileThumb($key)
+{
+    return fileManager()->$key()->thumb;
+}
+
+
 function getFileExt($key)
 {
     return fileManager()->$key()->extensions;
@@ -311,7 +321,7 @@ function getFileExt($key)
 function diffForHumans($date)
 {
     $lang = session()->get('lang');
-    if(!$lang){
+    if (!$lang) {
         $lang = getDefaultLang();
     }
 
@@ -326,7 +336,7 @@ function showDateTime($date, $format = 'Y-m-d h:i A')
         return '-';
     }
     $lang = session()->get('lang');
-    if(!$lang){
+    if (!$lang) {
         $lang = getDefaultLang();
     }
 
@@ -334,16 +344,17 @@ function showDateTime($date, $format = 'Y-m-d h:i A')
     return Carbon::parse($date)->translatedFormat($format);
 }
 
-function getDefaultLang(){
+function getDefaultLang()
+{
     return Language::where('is_default', Status::YES)->first()->code ?? 'en';
 }
 
 
-function getContent($dataKeys, $singleQuery = false, $limit = null, $orderById = false) 
+function getContent($dataKeys, $singleQuery = false, $limit = null, $orderById = false)
 {
 
     $templateName = activeTemplateName();
-  
+
     if ($singleQuery) {
         $content = Frontend::where('tempname', $templateName)->where('data_keys', $dataKeys)->orderBy('id', 'desc')->first();
     } else {
@@ -460,7 +471,8 @@ function gs($key = null)
     if ($key) return isset($general->$key) ? $general->$key : null;
     return $general;
 }
-function isImage($string){
+function isImage($string)
+{
     $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
     $fileExtension = pathinfo($string, PATHINFO_EXTENSION);
     if (in_array($fileExtension, $allowedExtensions)) {
@@ -480,28 +492,29 @@ function isHtml($string)
 }
 
 
-function convertToReadableSize($size) {
+function convertToReadableSize($size)
+{
     preg_match('/^(\d+)([KMG])$/', $size, $matches);
     $size = (int)$matches[1];
     $unit = $matches[2];
 
     if ($unit == 'G') {
-        return $size.'GB';
+        return $size . 'GB';
     }
 
     if ($unit == 'M') {
-        return $size.'MB';
+        return $size . 'MB';
     }
 
     if ($unit == 'K') {
-        return $size.'KB';
+        return $size . 'KB';
     }
 
-    return $size.$unit;
+    return $size . $unit;
 }
 
 
-function frontendImage($sectionName, $image, $size = null,$seo = false)
+function frontendImage($sectionName, $image, $size = null, $seo = false)
 {
     if ($seo) {
         return getImage('assets/images/frontend/' . $sectionName . '/seo/' . $image, $size);
@@ -548,8 +561,9 @@ function responseError($remark, $notify, $data = null)
 {
     return buildResponse($remark, 'error', $notify, $data);
 }
-function checkUser($routeName) {
-    if(!$routeName){
+function checkUser($routeName)
+{
+    if (!$routeName) {
         return false;
     }
     $routes = [
@@ -567,8 +581,8 @@ function checkUser($routeName) {
         'product.details'
     ];
     $isRoute = in_array($routeName, $routes);
-    
-    if($isRoute) {
+
+    if ($isRoute) {
         return true;
     }
     return false;

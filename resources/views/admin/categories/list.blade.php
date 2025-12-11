@@ -1,5 +1,4 @@
 @extends('admin.layouts.app')
-
 @section('panel')
     <div class="col-lg-12">
         <div class="card">
@@ -34,7 +33,6 @@
                                         @endphp
                                     </td>
                                     <td>
-
                                         <div class="button--group">
                                             <a href="javascript:void(0)"
                                                 class="btn btn-sm btn-outline--primary ms-1 editBtn"
@@ -44,8 +42,6 @@
                                                 data-image="{{ getImage(getFilePath('categoryList') . '/' . $category->image, getFileSize('categoryList')) }}">
                                                 <i class="la la-pen"></i>@lang('Edit')
                                             </a>
-
-
                                             @if ($category->status)
                                                 <button class="btn btn-sm btn-outline--danger confirmationBtn"
                                                     data-question="@lang('Are you sure to remove this item from this system?')"
@@ -59,8 +55,6 @@
                                                     <i class="la la-eye-slash"></i>@lang('Enable')
                                                 </button>
                                             @endif
-
-
                                         </div>
                                     </td>
                                 </tr>
@@ -75,8 +69,6 @@
             </div>
         </div><!-- card end -->
     </div>
-
-
     {{-- NEW MODAL --}}
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
         aria-hidden="true">
@@ -85,27 +77,23 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="createModalLabel"> @lang('Add New Category')</h4>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i
-                    class="las la-times"></i></button>
+                            class="las la-times"></i></button>
                 </div>
                 <form class="form-horizontal" method="post" action="{{ route('admin.categories.create') }}"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="form-group col-12">
-                                <label> @lang('Image')</label>
-                                <x-image-uploader :imagePath="getImage(null, getFileSize('categoryList'))" :size="getFileSize('categoryList')" class="w-100" id="imageCreate"
-                                    :required="true" />
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <label>@lang('Name')</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" value="{{ old('name') }}" name="name"
-                                    required>
-                            </div>
+
+                        <div class="form-group">
+                            <label> @lang('Image')</label>
+                            <x-image-uploader :imagePath="getImage(null, getFileSize('categoryList'))" :size="getFileSize('categoryList')" class="w-100" id="imageCreate"
+                                :required="true" />
                         </div>
 
+                        <div class="form-group">
+                            <label>@lang('Name')</label>
+                            <input type="text" class="form-control" value="{{ old('name') }}" name="name" required>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary w-100 h-45" id="btn-save"
@@ -115,8 +103,6 @@
             </div>
         </div>
     </div>
-
-
     {{-- EDIT MODAL --}}
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
         aria-hidden="true">
@@ -136,10 +122,8 @@
                                 :required="false" />
                         </div>
                         <div class="form-group">
-                            <label>@lang('Item Name')</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" value="{{ old('name') }}" name="name">
-                            </div>
+                            <label>@lang('Name')</label>
+                            <input type="text" class="form-control" value="{{ old('name') }}" name="name" required>
                         </div>
 
                     </div>
@@ -149,15 +133,13 @@
                     </div>
                 </form>
             </div>
-            
         </div>
     </div>
-
     <x-confirmation-modal />
 @endsection
 @push('breadcrumb-plugins')
-    <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="modal"
-        data-bs-target="#createModal"><i class="las la-plus"></i>@lang('Add New')</button>
+    <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="modal" data-bs-target="#createModal"><i
+            class="las la-plus"></i>@lang('Add New')</button>
 @endpush
 
 @push('script')

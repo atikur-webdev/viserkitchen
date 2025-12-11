@@ -13,13 +13,14 @@ class CategoryController extends Controller
     public function index()
     {
         $pageTitle = 'Category';
-      
+
         $categories = Category::orderBy('id', 'desc')->get();
         return view('admin.categories.list', compact('pageTitle', 'categories'));
     }
 
-    public function create(Request $request) {
- 
+    public function create(Request $request)
+    {
+
         $request->validate([
             'image' => ['required', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
             'name' => 'required|string|max:40',
@@ -36,6 +37,7 @@ class CategoryController extends Controller
             }
         }
         $category->name = $request->name;
+        $category->status = Status::YES;
         $category->save();
 
         $notify[] = ['success', 'Category added successfully'];
@@ -43,9 +45,15 @@ class CategoryController extends Controller
     }
     public function update(Request $request, $id)
     {
+        $validationRule = $id ? 'nullable' : 'required';
+
         $request->validate([
-            'name' => 'nullable',
-            'image' => ['nullable', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])]
+            'name'  => 'required|string|max:255',
+            'image' => [
+                $validationRule,
+                'image',
+                new FileTypeValidate(['jpg', 'jpeg', 'png'])
+            ],
         ]);
         $categories = Category::findOrFail($id);
         $old = $categories->image;
@@ -60,10 +68,10 @@ class CategoryController extends Controller
             }
         }
         $categories->name = $request->name;
-        $categories->status = $request->status ? Status::YES : Status::NO;
+        $categories->status = Status::YES;
         $categories->save();
-        $notify[] = ['success', 'Item updated successfully'];
-        return back()->with($notify);
+        $notify[] = ['success', 'Item added successfully'];
+        return back()->withNotify($notify);
     }
     public function status($id)
     {

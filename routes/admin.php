@@ -81,20 +81,21 @@ Route::middleware('admin')->group(function () {
         Route::get('notification-log/{id}', 'notificationLog')->name('notification.log');
     });
 
-    Route::controller('CategoryController')->name('categories.')->group(function () {
-       
+    Route::controller('CategoryController')->prefix('category')->name('categories.')->group(function () {
         Route::get('index', 'index')->name('index');
-        Route::post('create','create')->name('create');
+        Route::post('create', 'create')->name('create');
         Route::post('update/{id}', 'update')->name('update');
         Route::post('status/{id}', 'status')->name('status');
     });
 
-    Route::controller('ProductController')->name('products.')->group(function() {
-        Route::get('/', 'index')->name('index');
+    Route::controller('ProductController')->prefix('product')->name('product.')->group(function () {
+        Route::get('index', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
         Route::post('store', 'store')->name('store');
+        Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('edit/{id}', 'update')->name('update');
         // Route::post('delete/{id}', 'delete')->name('delete');
-        Route::post('productStatus/{id}', 'status')->name('status');
+        Route::post('status/{id}', 'status')->name('status');
     });
 
     // Subscriber
