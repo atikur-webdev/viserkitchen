@@ -7,10 +7,10 @@
                     <table class="table table--light style--two custom-data-table">
                         <thead>
                             <tr>
-                                <th>@lang('Name')</th>
-                                <th>@lang('Regular Price')</th>
-                                <th>@lang('Sales Price')</th>
                                 <th>@lang('Image')</th>
+                                <th>@lang('Name')</th>
+                                <th>@lang('Sales Price')</th>
+                                <th>@lang('Regular Price')</th>
                                 <th>@lang('Category')</th>
                                 <th>@lang('Ingredients')</th>
                                 <th>@lang('Spicy Level')</th>
@@ -19,7 +19,6 @@
                                 <th>@lang('Delivery Time')</th>
                                 <th>@lang('Ratings')</th>
                                 <th>@lang('Short Description')</th>
-                                <th>@lang('Description')</th>
                                 <th>@lang('Actions')</th>
                             </tr>
                         </thead>
@@ -29,7 +28,7 @@
                                     <td>
                                         <div class="user">
                                             <div class="thumb">
-                                                <img src="{{ getImage(getFilePath('products') . '/' . $product->image, getFileSize('products')) }}"
+                                                <img src="{{ getImage(getFilePath('products') . '/' . $product?->image, getFileSize('products')) }}"
                                                     alt="{{ __($product->name) }}" class="plugin_bg">
                                             </div>
                                         </div>
@@ -38,22 +37,13 @@
                                         <span class="name">{{ __($product->name) }}</span>
                                     </td>
                                     <td>
-                                        {{ $product->ratings }}
+                                        {{ showAmount($product->sales_price) }}
                                     </td>
                                     <td>
-                                        {{ __($product->category->name) }}
+                                        {{ showAmount($product->regular_price) }}
                                     </td>
                                     <td>
-                                        {{ __($product->regular_price) }}
-                                    </td>
-                                    <td>
-                                        {{ __($product->sales_price) }}
-                                    </td>
-                                    <td>
-                                        {{ __($product->delivery_time) }}
-                                    </td>
-                                    <td>
-                                        {{ __($product->short_description) }}
+                                        {{ __($product?->category?->name) }}
                                     </td>
                                     <td>
                                         {{ __($product->ingredients) }}
@@ -62,10 +52,19 @@
                                         {{ __($product->spicy_level) }}
                                     </td>
                                     <td>
+                                        {{ __($product->calories) }}
+                                    </td>
+                                    <td>
                                         {{ __($product->cooking_time) }}
                                     </td>
                                     <td>
-                                        {{ __($product->calories) }}
+                                        {{ __($product->delivery_time) }}
+                                    </td>
+                                    <td>
+                                        {{ $product->ratings }}
+                                    </td>
+                                    <td>
+                                        {{ __($product->short_description) }}
                                     </td>
                                     <td>
                                         <div class="button--group">

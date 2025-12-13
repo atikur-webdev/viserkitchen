@@ -69,6 +69,7 @@
             </div>
         </div><!-- card end -->
     </div>
+
     {{-- NEW MODAL --}}
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
         aria-hidden="true">
@@ -103,6 +104,7 @@
             </div>
         </div>
     </div>
+
     {{-- EDIT MODAL --}}
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
         aria-hidden="true">
@@ -135,6 +137,7 @@
             </div>
         </div>
     </div>
+
     <x-confirmation-modal />
 @endsection
 @push('breadcrumb-plugins')
@@ -151,16 +154,10 @@
                 var url = $(this).data('url');
                 let name = $(this).data('name');
                 let category = $(this).data('category');
-                console.log(category);
 
                 modal.find('form').attr('action', url);
                 modal.find('input[name="name"]').val(name);
                 modal.find('.image-upload-preview').css('background-image', `url(${$(this).data('image')})`);
-                if (category.status == 1) {
-                    modal.find('input[name=status]').bootstrapToggle('on');
-                } else {
-                    modal.find('input[name=status]').bootstrapToggle('of');
-                }
                 modal.modal('show');
             });
 

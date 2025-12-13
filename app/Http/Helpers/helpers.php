@@ -577,7 +577,7 @@ function checkUser($routeName)
         'user.password.reset',
         'ticket.view',
         'checkout',
-        'category.index',
+        'category.products',
         'product.details'
     ];
     $isRoute = in_array($routeName, $routes);

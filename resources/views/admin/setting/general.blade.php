@@ -68,7 +68,6 @@
                                     <option value="100" @selected(gs('paginate_number') == 100)>@lang('100 items per page')</option>
                                 </select>
                             </div>
-
                             <div class="form-group col-xl-3 col-sm-6 ">
                                 <label class="required"> @lang('Currency Showing Format')</label>
                                 <select class="select2 form-control" name="currency_format"
@@ -81,7 +80,7 @@
                             <div class="col-xl-3 col-sm-6">
                                 <div class="form-group ">
                                     <label>@lang('Site Video')</label>
-                                    <input class="form-control" type="file" name="file" required
+                                    <input class="form-control" type="file" name="file"
                                         value="{{ gs('site_video') }}">
                                 </div>
                             </div>

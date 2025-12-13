@@ -33,3 +33,54 @@
 @push('script-lib')
     <script src="{{ asset(activeTemplate(true) . 'js/slick.min.js') }}"></script>
 @endpush
+
+
+@push('script')
+    <script>
+        "use strict";
+        $(document).ready(function() {
+            $(".client-slider").slick({
+                fade: false,
+                slidesToShow: 6,
+                slidesToScroll: 1,
+                infinite: true,
+                autoplay: true,
+                pauseOnHover: true,
+                dots: false,
+                speed: 500,
+                autoplaySpeed: 5000,
+                arrows: false,
+                nextArrow: '<i class="las la-arrow-right arrow-right"></i>',
+                prevArrow: '<i class="las la-arrow-left arrow-left"></i> ',
+                responsive: [{
+                        breakpoint: 1399,
+                        settings: {
+                            slidesToShow: 15,
+                        },
+                    },
+                    {
+                        breakpoint: 991,
+                        settings: {
+                            slidesToShow: 4,
+                            slidesToScroll: 1,
+                        },
+                    },
+                    {
+                        breakpoint: 767,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 1,
+                        },
+                    },
+                    {
+                        breakpoint: 575,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1,
+                        },
+                    },
+                ],
+            });
+        });
+    </script>
+@endpush

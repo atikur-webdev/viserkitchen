@@ -31,9 +31,10 @@ class SiteController extends Controller
         }
         $pageTitle = 'Home';
         $sections = Page::where('tempname', activeTemplate())->where('slug', '/')->first();
+        $categories = Category::where('status', Status::YES)->orderBy('status', 'desc')->get();
         $seoContents = $sections->seo_content;
         $seoImage = $seoContents?->image ? getImage(getFilePath('seo') . '/' . $seoContents?->image, getFileSize('seo')) : null;
-        return view('Template::home', compact('pageTitle', 'sections', 'seoContents', 'seoImage'));
+        return view('Template::home', compact('pageTitle', 'sections', 'categories', 'seoContents', 'seoImage'));
     }
 
     public function contact()
@@ -112,13 +113,14 @@ class SiteController extends Controller
         return to_route('ticket.view', [$ticket->ticket])->withNotify($notify);
     }
 
-    public function categoryIndex($id)
+    public function categoryProducts($id)
     {
         $pageTitle = 'Category List';
         $categoryId = $id;
-        $products = Product::where('category_id', $categoryId)->with('category')->get();
+        $categoryIds = request()->get('category', []);
+        $products = Product::where('category_id', $categoryId)->with('category')->paginate(getPaginate());
         $categories = Category::where('status', Status::CATEGORY_ACTIVE)->get();
-        return view('Template::category.index', compact('pageTitle', 'products', 'categories', 'categoryId'));
+        return view('Template::category.index', compact('pageTitle', 'products', 'categories', 'categoryId', 'categoryIds'));
     }
 
     public function productDetails($id)
@@ -127,6 +129,31 @@ class SiteController extends Controller
         $product = Product::where('id', $id)->with('images', 'category')->first();
         $relatedProducts = Product::where('category_id', $product->category_id)->limit(10)->get();
         return view('Template::product.details', compact('pageTitle', 'product', 'relatedProducts'));
+    }
+
+    public function filterProduct(Request $request)
+    {
+        $minPrice = (float) $request->min_price ?? 0;
+        $maxPrice = (float) ($request->max_price > 0)  ? $request->max_price : $minPrice;
+        $products = Product::active()
+            ->when(
+                $request->category_id,
+                fn($query) =>
+                $query->whereIn('category_id', $request->category_id)
+            )->when(
+                $request->min_price,
+                fn($query) =>
+                $query->where(function ($q) use ($minPrice, $maxPrice) {
+                    $q->whereBetween('sales_price', [$minPrice, $maxPrice]);
+                })
+            );
+        $products = $products->paginate(getPaginate());
+        $notify[] = 'Get category products successfully';
+        $view = view('Template::category.product', compact('products'))->render();
+
+        return responseSuccess('category_products', $notify, [
+            'html' => $view
+        ]);
     }
 
     public function checkout()

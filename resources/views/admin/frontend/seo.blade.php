@@ -5,21 +5,29 @@
         <div class="col-lg-12 col-md-12 mb-30">
             <div class="card">
                 <div class="card-body">
-                     <form action="{{ route('admin.frontend.seo.update') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.frontend.seo.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-xl-4">
                                 <div class="form-group">
                                     <label>@lang('SEO Image')</label>
-                                    <x-image-uploader class="w-100" :imagePath="getImage(getFilePath('seo') . '/' . (isset($seo->data_values->image) ? $seo->data_values->image : ''), getFileSize('seo'))" :size="getFileSize('seo')" :required="false" />
+                                    <x-image-uploader class="w-100" :imagePath="getImage(
+                                        getFilePath('seo') .
+                                            '/' .
+                                            (isset($seo->data_values->image) ? $seo->data_values->image : ''),
+                                        getFileSize('seo'),
+                                    )" :size="getFileSize('seo')"
+                                        :required="false" />
                                 </div>
                             </div>
 
                             <div class="col-xl-8 mt-xl-0 mt-4">
                                 <div class="form-group">
                                     <label>@lang('Meta Keywords')</label>
-                                    <small class="ms-2 mt-2  ">@lang('Separate multiple keywords by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
-                                    <select name="keywords[]" class="form-control select2-auto-tokenize" multiple="multiple" required>
+                                    <small class="ms-2 mt-2  ">@lang('Separate multiple keywords by') <code>,</code>(@lang('comma'))
+                                        @lang('or') <code>@lang('enter')</code> @lang('key')</small>
+                                    <select name="keywords[]" class="form-control select2-auto-tokenize" multiple="multiple"
+                                        required>
                                         @if (isset($seo->data_values->keywords) && $seo->data_values->keywords)
                                             @foreach ($seo->data_values->keywords as $option)
                                                 <option value="{{ $option }}" selected>{{ __($option) }}</option>
@@ -29,7 +37,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label>@lang('Meta Robots') <small>(@lang('optional'))</small></label>
-                                    <input type="text" class="form-control" name="meta_robots" value="{{ isset($seo->data_values->meta_robots) ? $seo->data_values->meta_robots : '' }}" placeholder="e.g. noindex, follow">
+                                    <input type="text" class="form-control" name="meta_robots"
+                                        value="{{ isset($seo->data_values->meta_robots) ? $seo->data_values->meta_robots : '' }}"
+                                        placeholder="e.g. noindex, follow">
                                 </div>
                                 <div class="form-group">
                                     <label>@lang('Meta Description')</label>
@@ -37,7 +47,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label>@lang('Social Title')</label>
-                                    <input type="text" class="form-control" name="social_title" value="{{ isset($seo->data_values->social_title) ? $seo->data_values->social_title : '' }}" required>
+                                    <input type="text" class="form-control" name="social_title"
+                                        value="{{ isset($seo->data_values->social_title) ? $seo->data_values->social_title : '' }}"
+                                        required>
                                 </div>
                                 <div class="form-group">
                                     <label>@lang('Social Description')</label>
@@ -54,4 +66,3 @@
         </div>
     </div>
 @endsection
-

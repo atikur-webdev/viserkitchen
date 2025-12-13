@@ -57,3 +57,38 @@
 @push('script-lib')
     <script src="{{ asset(activeTemplate(true) . 'js/slick.min.js') }}"></script>
 @endpush
+
+
+@push('script')
+    <script>
+        "use strict";
+        $(document).ready(function() {
+            $(".testimonial-slider").slick({
+                fade: false,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                infinite: true,
+                autoplay: true,
+                pauseOnHover: true,
+                centerMode: false,
+                dots: false,
+                arrows: false,
+                nextArrow: '<i class="las la-arrow-right arrow-right"></i>',
+                prevArrow: '<i class="las la-arrow-left arrow-left"></i> ',
+                responsive: [{
+                        breakpoint: 991,
+                        settings: {
+                            slidesToShow: 2,
+                        },
+                    },
+                    {
+                        breakpoint: 767,
+                        settings: {
+                            slidesToShow: 1,
+                        },
+                    },
+                ],
+            });
+        });
+    </script>
+@endpush

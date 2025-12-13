@@ -36,7 +36,7 @@ class GeneralSettingController extends Controller
             'timezone' => 'required|integer',
             'currency_format' => 'required|in:1,2,3',
             'paginate_number' => 'required|integer',
-            'file' => ['nullable', new FileTypeValidate(['jpeg', 'jpg', 'png', 'mp4'])]
+            'file' => ['nullable', new FileTypeValidate(['mp4'])]
         ]);
 
         $timezones = timezone_identifiers_list();

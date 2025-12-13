@@ -32,7 +32,7 @@
                                 <select name="category_id" class="form-control select2" data-minimum-results-for-search="-1"
                                     required>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ __($category->name) }}</option>
+                                        <option value="{{ $category->id }}" name="category">{{ __($category->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -36,7 +36,7 @@
                                             {{ gs('cur_sym') }}{{ __($product->regular_price) }}
                                         </span>
                                         <p class="text mt-1">
-                                            {{ __($product->delivery_time) }}
+                                            @lang('Delivered within') {{ __($product->delivery_time) }}
                                         </p>
                                     </div>
                                     <ul class="rating-list">
@@ -80,7 +80,7 @@
                                                 <div class="information-list__text">
                                                     <div class="details-categories-list">
                                                         <a class="details-categories-item"
-                                                            href="{{ route('category.index', $product->category_id) }}">{{ __($product->category->name) }}</a>
+                                                            href="{{ route('category.products', $product->category_id) }}">{{ __($product->category->name) }}</a>
                                                     </div>
                                                 </div>
                                             </li>
@@ -163,7 +163,7 @@
                                                 <div class="review-wrapper__top">
                                                     <div class="review-wrapper__left">
                                                         <h6 class="title">@lang('Ratings & Review')</h6>
-                                                   
+
                                                         <!-- 5 Star -->
                                                         <div class="rating-wrapper">
                                                             <ul class="rating-list">
@@ -178,7 +178,7 @@
                                                                         </li>
                                                                     @endif
                                                                 @endfor
-                                                                
+
                                                             </ul>
                                                             <div class="progress-wrapper">
                                                                 <div class="progress">
@@ -514,4 +514,72 @@
 
 @push('script-lib')
     <script src="{{ asset(activeTemplate(true) . 'js/slick.min.js') }}"></script>
+@endpush
+
+
+
+@push('script')
+    <script>
+        "use strict";
+        $(document).ready(function() {
+            $(".product-details__wrapper").slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: false,
+                dots: false,
+                fade: true,
+                asNavFor: ".product-details__gallery",
+                prevArrow: '<button type="button" class="slick-prev gig-details-thumb-arrow"><i class="las la-long-arrow-alt-left"></i></button>',
+                nextArrow: '<button type="button" class="slick-next gig-details-thumb-arrow"><i class="las la-long-arrow-alt-right"></i></button>',
+            });
+
+            $(".product-details__gallery").slick({
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                asNavFor: ".product-details__wrapper",
+                dots: false,
+                arrows: true,
+
+                focusOnSelect: true,
+                prevArrow: '<button type="button" class="slick-prev gig-details-arrow"><i class="las la-long-arrow-alt-left"></i></button>',
+                nextArrow: '<button type="button" class="slick-next gig-details-arrow"><i class="las la-long-arrow-alt-right"></i></button>',
+                responsive: [{
+                        breakpoint: 1200,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 1,
+                        },
+                    },
+                    {
+                        breakpoint: 991,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 1,
+                        },
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1,
+                        },
+                    },
+                    {
+                        breakpoint: 676,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1,
+                        },
+                    },
+                    {
+                        breakpoint: 460,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1,
+                        },
+                    },
+                ],
+            });
+        });
+    </script>
 @endpush

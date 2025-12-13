@@ -13,7 +13,6 @@ class CategoryController extends Controller
     public function index()
     {
         $pageTitle = 'Category';
-
         $categories = Category::orderBy('id', 'desc')->get();
         return view('admin.categories.list', compact('pageTitle', 'categories'));
     }
@@ -37,12 +36,12 @@ class CategoryController extends Controller
             }
         }
         $category->name = $request->name;
-        $category->status = Status::YES;
         $category->save();
 
         $notify[] = ['success', 'Category added successfully'];
         return back()->withNotify($notify);
     }
+
     public function update(Request $request, $id)
     {
         $validationRule = $id ? 'nullable' : 'required';
@@ -68,11 +67,11 @@ class CategoryController extends Controller
             }
         }
         $categories->name = $request->name;
-        $categories->status = Status::YES;
         $categories->save();
         $notify[] = ['success', 'Item added successfully'];
         return back()->withNotify($notify);
     }
+
     public function status($id)
     {
         return Category::changeStatus($id);

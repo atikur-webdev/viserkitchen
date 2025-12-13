@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/clear', function(){
+Route::get('/clear', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
 });
 
@@ -41,12 +41,13 @@ Route::controller('SiteController')->group(function () {
     Route::get('policy/{slug}', 'policyPages')->name('policy.pages');
 
     Route::get('placeholder-image/{size}', 'placeholderImage')->withoutMiddleware('maintenance')->name('placeholder.image');
-    Route::get('maintenance-mode','maintenance')->withoutMiddleware('maintenance')->name('maintenance');
+    Route::get('maintenance-mode', 'maintenance')->withoutMiddleware('maintenance')->name('maintenance');
     Route::post('newsletter', 'newsletter')->name('newsletter');
-    Route::get('category/index/{id}', 'categoryIndex')->name('category.index');
+    Route::get('category/products/{id}', 'categoryProducts')->name('category.products');
     Route::get('product/details/{id}', 'productDetails')->name('product.details');
+    Route::get('filter-products', 'filterProduct')->name('filter.products');
     Route::get('checkout', 'checkout')->name('checkout');
-    
+
     Route::get('/{slug}', 'pages')->name('pages');
     Route::get('/', 'index')->name('home');
 });
